@@ -163,7 +163,7 @@ class RELNode {
     }
 }
 
-class RextExtendedLine {
+class RectExtendedLine {
 
     dir : number = 1
     root : RELNode = new RELNode(0)
@@ -184,5 +184,27 @@ class RextExtendedLine {
 
     startUpdating(cb : Function) {
         this.curr.startUpdating(cb)
+    }
+}
+
+class Renderer {
+
+    rel : RectExtendedLine = new RectExtendedLine()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.rel.draw(context)
+    }
+
+    handleTap(cb : Function) {
+        this.rel.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.rel.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
     }
 }
