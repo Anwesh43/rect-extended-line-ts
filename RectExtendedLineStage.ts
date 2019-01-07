@@ -20,6 +20,29 @@ const updateScale : Function = (scale : number, dir : number, a : number, b : nu
     return mirrorValue(scale, a, b) * dir * scGap
 }
 
+const drawRELNode : Function = (context : CanvasRenderingContext2D, i : number, scale : number) => {
+    const gap : number = w / (nodes + 1)
+    const size : number = gap / sizeFactor
+    const sc1 : number = divideScale(scale, 0, 2)
+    const sc2 : number = divideScale(scale, 1, 2)
+    context.save()
+    context.translate(gap * (i + 1), h/2)
+    context.rotate(Math.PI/2 * sc2)
+    context.strokeRect(-size/2, -size/2, size, size)
+    for (var j = 0; j < lines; j++) {
+        const sc : number = divideScale(sc1, j, lines)
+        context.save()
+        context.rotate(Math.PI/2 * j)
+        context.translate(-size * sc + size/2, size/2)
+        context.beginPath()
+        context.moveTo(0, 0)
+        context.lineTo(-size, 0)
+        context.stroke()
+        context.restore()
+    }
+    context.restore()
+}
+
 class RectExtendedLineStage {
 
     canvas : HTMLCanvasElement = document.createElement('canvas')
